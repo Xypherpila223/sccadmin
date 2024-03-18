@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventory Management Dashboard</title>
+<link rel="stylesheet" href="admin.css">
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar {
+    height: 100%;
+    width: 300px;
+    background-color: #000; /* Black background color */
+    position: fixed;
+    top: 0;
+    left: -300px;
+    transition: left 0.3s, width 0.3s;
+    padding-top: 20px;
+    color: #fff; /* White text color */
+    z-index: 999;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar ul li a {
+    display: block;
+    padding: 10px;
+    color: #fff; /* White text color */
+    text-decoration: none;
+    text-align: center;
+}
+
+.sidebar ul li a:hover {
+    background-color: #333; /* Darker black hover color */
+}
+
+.toggle-sidebar {
+    position: absolute;
+    top: 10px;
+    left: 285px;
+    background-color: #000; /* Black background color */
+    color: #fff; /* White text color */
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.3s, transform 0.3s;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    z-index: 1000; /* Ensure the button is above the sidebar content */
+}
+
+.toggle-sidebar.hide {
+    opacity: 0;
+}
+
+.toggle-sidebar::after {
+    content: "";
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid #fff; /* White border color */
+    border-bottom: 8px solid #fff; /* White border color */
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.3s;
+}
+
+
+.rotating {
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.dashboard {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-left: 300px;
+    padding: 20px;
+    width: calc(100% - 300px);
+    transition: margin-left 0.3s, width 0.3s;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.sidebar-open {
+    left: 0;
+}
+
+.dashboard-open {
+    margin-left: 0;
+    width: 100%;
+}
+
+.box1 {
+    background-color: #63d8ff; /* White background color */
+    color: #000; /* Black text color */
+    border: 1px solid #000; /* Black border */
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: margin-left 0.3s, width 0.3s, background-color 0.3s; /* Added transition for background-color */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: calc(50% - 20px);
+    height: 200px;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+@media screen and (max-width: 768px) {
+    .box1 {
+        width: calc(100% - 20px);
+    }
+}
+
+.box:hover {
+    background-color: #6ecaff; /* Light gray background color on hover */
+    cursor: pointer;
+}
+
+
+
+@media screen and (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+        left: -200px;
+    }
+
+    .dashboard {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .toggle-sidebar {
+        left: 10px;
+    }
+}
+</style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Dashboard</h2>
+        <button class="toggle-sidebar" onclick="toggleSidebar()"></button>
+        <ul>
+            <li><a href="admin.html">Overview</a></li>
+            <li><a href="studentaccount.html">Student Accounts</a></li>
+            <li><a href="#orders">Teacher Accounts</a></li>
+            <li><a href="#settings">Reports</a></li>
+        </ul>
+    </div>
+    <div class="dashboard">
+       <div class="box1" >
+            <h2>Total Items</h2>
+            <p id="totalItems">0</p>
+        </div>
+        <div class="box1">
+            <h2>In Stock</h2>
+            <p id="inStock">0</p>
+        </div>
+        <div class="box1">
+            <h2>Out of Stock</h2>
+            <p id="outOfStock">0</p>
+        </div>
+        <div class="box1">
+            <h2>Online Users</h2>
+            <p id="onlineUsers">0</p>
+        </div>
+        <div class="box1">
+            <h2>Offline Users</h2>
+            <p id="offlineUsers">0</p>
+        </div>
+        <div class="box1">
+            <h2>Recent Orders</h2>
+            <ul id="recentOrders">
+            </ul>
+        </div>
+    </div>
+    <script>
+   function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const toggleButton = document.querySelector('.toggle-sidebar');
+
+  sidebar.classList.toggle('sidebar-open');
+
+  if (sidebar.classList.contains('sidebar-open')) {
+    toggleButton.style.transform = 'rotate(0deg)';
+  } else {
+    toggleButton.style.transform = 'rotate(180deg)';
+  }
+
+  const dashboard = document.querySelector('.dashboard');
+  const boxes = document.querySelectorAll('.box');
+  if (sidebar.classList.contains('sidebar-open')) {
+    dashboard.style.marginLeft = sidebar.offsetWidth + 'px';
+    dashboard.style.width = 'calc(100% - ' + sidebar.offsetWidth + 'px)';
+    boxes.forEach(box => {
+      box.style.flexBasis = 'calc(50% - 20px)';
+    });
+  } else {
+    dashboard.style.marginLeft = '300px'; // Changed to 300px to align with sidebar width
+    dashboard.style.width = 'calc(100% - 300px)';
+    boxes.forEach(box => {
+      box.style.flexBasis = 'calc(50% - 20px)';
+    });
+  }
+}
+
+// Example data (replace with actual data from your inventory system)
+const totalItems = 1000;
+const inStock = 800;
+const outOfStock = 200;
+const onlineUsers = 50;
+const offlineUsers = 10;
+const recentOrders = [
+  { id: 1, product: "Product A", quantity: 5 },
+  { id: 2, product: "Product B", quantity: 3 },
+  { id: 3, product: "Product C", quantity: 2 }
+];
+
+// Update the dashboard with the example data
+document.getElementById("totalItems").textContent = totalItems;
+document.getElementById("inStock").textContent = inStock;
+document.getElementById("outOfStock").textContent = outOfStock;
+document.getElementById("onlineUsers").textContent = onlineUsers;
+document.getElementById("offlineUsers").textContent = offlineUsers;
+
+const recentOrdersList = document.getElementById("recentOrders");
+recentOrders.forEach(order => {
+  const li = document.createElement("li");
+  li.innerHTML = `${order.product} - Quantity: <span>${order.quantity}</span>`;
+  recentOrdersList.appendChild(li);
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    let isOpen = false;
+    const sidebar = document.querySelector('.sidebar');
+    const dashboard = document.querySelector('.dashboard');
+    dashboard.addEventListener('dblclick', function () {
+        isOpen = !isOpen;
+        if (isOpen) {
+            sidebar.classList.add('open');
+            dashboard.classList.add('dashboard-open');
+            document.querySelectorAll('.box').forEach(box => {
+                box.classList.add('box-open');
+            });
+            document.querySelector('.toggle-sidebar').classList.add('rotate-left');
+            document.querySelector('.toggle-sidebar').classList.remove('rotate-right');
+        } else {
+            sidebar.classList.remove('open');
+            dashboard.classList.remove('dashboard-open');
+            document.querySelectorAll('.box').forEach(box => {
+                box.classList.remove('box-open');
+            });
+            document.querySelector('.toggle-sidebar').classList.remove('rotate-left');
+            document.querySelector('.toggle-sidebar').classList.add('rotate-right');
+        }
+        if (sidebar.classList.contains('sidebar-open')) {
+            dashboard.style.marginLeft = sidebar.offsetWidth + 'px';
+            dashboard.style.width = 'calc(100% - ' + sidebar.offsetWidth + 'px)';
+            document.querySelectorAll('.box').forEach(box => {
+                box.style.flexBasis = 'calc(50% - 20px)';
+            });
+        } else {
+            dashboard.style.marginLeft = '300px'; // Changed to 300px to align with sidebar width
+            dashboard.style.width = 'calc(100% - 300px)';
+            document.querySelectorAll('.box').forEach(box => {
+                box.style.flexBasis = 'calc(50% - 20px)';
+            });
+        }
+    });
+});
+
+</script>
+</body>
+</html>
