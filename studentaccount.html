@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventory Management Dashboard</title>
+<link rel="stylesheet" href="admin.css">
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-weight: bold;
+}
+
+.container {
+    width: 750px;
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.sidebar {
+    height: 100%;
+    width: 300px;
+    background-color: #000;
+    position: fixed;
+    top: 0;
+    left: -300px;
+    transition: left 0.3s, width 0.3s;
+    padding-top: 20px;
+    color: #fff;
+    z-index: 999;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar ul li a {
+    display: block;
+    padding: 10px;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+}
+
+.sidebar ul li a:hover {
+    background-color: #333;
+}
+
+.toggle-sidebar {
+    position: absolute;
+    top: 10px;
+    left: 285px;
+    background-color: #000;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.3s, transform 0.3s;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    z-index: 1000;
+}
+
+.toggle-sidebar.hide {
+    opacity: 0;
+}
+
+.toggle-sidebar::after {
+    content: "";
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid #fff;
+    border-bottom: 8px solid #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.3s;
+}
+
+.dashboard {
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.sidebar-open {
+    left: 0;
+}
+
+.dashboard-open {
+    margin-left: 0;
+    width: 100%;
+}
+
+.table-container {
+    overflow-x: auto;
+    width: 1280px;
+    transition: width 0.3s; /* Added transition */
+}
+
+.sidebar.sidebar-open + .dashboard .table-container {
+    width: calc(160% - 100px); /* Adjusted width when sidebar is open */
+}
+
+
+.table-container table {
+    width: 100%;
+    height: 200px;
+    border-collapse: collapse;
+    background-color: #63d8ff; /* Blue background color */
+}
+
+th, td {
+    padding: 24px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #bebebe;
+    font-size: 16px;
+}
+
+td {
+    font-size: 14px;
+}
+
+@media screen and (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+        left: -200px;
+    }
+
+    .dashboard {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .toggle-sidebar {
+        left: 10px;
+    }
+}
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Dashboard</h2>
+            <button class="toggle-sidebar" onclick="toggleSidebar()"></button>
+            <ul>
+                <li><a href="admin.html">Overview</a></li>
+                <li><a href="#inventory">Student Accounts</a></li>
+                <li><a href="#orders">Teacher Accounts</a></li>
+                <li><a href="#settings">Reports</a></li>
+            </ul>
+        </div>
+        <div class="dashboard">
+            <div class="">
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Account Status</th>
+                        </tr>
+                        <tr>
+                            <td>12345</td>
+                            <td>John Doe</td>
+                            <td>johndoe@example.com</td>
+                            <td>Active</td>
+                        </tr>
+                        <tr>
+                            <td>54321</td>
+                            <td>Jane Smith</td>
+                            <td>janesmith@example.com</td>
+                            <td>Inactive</td>
+                        </tr>
+                        <tr>
+                            <td>67890</td>
+                            <td>Alice Johnson</td>
+                            <td>alicejohnson@example.com</td>
+                            <td>Active</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+      function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const toggleButton = document.querySelector('.toggle-sidebar');
+
+  sidebar.classList.toggle('sidebar-open');
+
+  if (sidebar.classList.contains('sidebar-open')) {
+    toggleButton.style.transform = 'rotate(0deg)';
+  } else {
+    toggleButton.style.transform = 'rotate(180deg)';
+  }
+      }
+    
+    </script>
+</body>
+</html>
