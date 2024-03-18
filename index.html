@@ -151,8 +151,8 @@
         <div class="login-box">
             <div class="left-side">
                 <div class="logo">
-                    <img src="teacher-removebg-preview.png" alt="Student Friendly Logo"> <!-- Placeholder image URL -->
-                    <div style= "text-align: center; margin-top: 5px; font-size: 22px;font-weight: bold; color: rgb(34, 137, 248);">TEACHER</div>
+                    <img src="admin.png" alt="Student Friendly Logo"> 
+                    <div style= "text-align: center; margin-top: 5px; font-size: 22px;font-weight: bold; color: rgb(34, 137, 248);">Admin</div>
                 </div>
             </div>
             <div class="right-side">
@@ -165,12 +165,6 @@
                     <input type="password" id="password" name="password" placeholder="Enter your password">
                 </div>
                 <div class="login-method">
-                    <div class="login-method">
-                        <a href="#" style="color: gray;">Register?</a><a href="#" style="color: gray;">Forgot Password?</a>
-                    </div>
-                    
-                    <button id="toggleMethod">Login with Email</button>
-                </div>
                 <div class="form-group">
                     <button id="loginButton">Login</button>
                 </div>
@@ -179,28 +173,6 @@
     </div>
 
     <script>
-        const toggleMethodButton = document.getElementById('toggleMethod');
-        const usernameLabel = document.querySelector('label[for="username"]');
-        const usernameInput = document.getElementById('username');
-        const loginMethodButton = document.getElementById('loginButton');
-
-        toggleMethodButton.addEventListener('click', () => {
-            const currentMethod = toggleMethodButton.textContent.trim();
-            if (currentMethod === 'Login with Email') {
-                toggleMethodButton.textContent = 'Login with Username';
-                // Change login method to email
-                usernameLabel.textContent = 'Email:';
-                usernameInput.setAttribute('type', 'email');
-                usernameInput.setAttribute('placeholder', 'Enter your email');
-            } else {
-                toggleMethodButton.textContent = 'Login with Email';
-                // Change login method back to username
-                usernameLabel.textContent = 'Username:';
-                usernameInput.setAttribute('type', 'text');
-                usernameInput.setAttribute('placeholder', 'Enter your username');
-            }
-        });
-
         loginMethodButton.addEventListener('click', () => {
             // Perform login logic here
             alert('Login button clicked!');
